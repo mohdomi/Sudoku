@@ -1,0 +1,111 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+void printSolution(vector <vector <int> > &board){
+
+    for(auto i:board){
+        for(auto j:i){
+            cout << j << " ";
+        }cout << endl;
+    }
+    cout << endl;
+
+}
+
+
+bool isSafe(int row , int col , vector<vector <int> > &board , int size , int i){
+
+    for(int rowIndex = 0; rowIndex < size; rowIndex++){
+        if(board[rowIndex][col] == i){
+            return false;
+        }
+    }
+
+    for(int colIndex = 0; colIndex < size; colIndex++){
+        if(board[row][colIndex] == i){
+            return false;
+        }
+    }
+
+    // check in  the partuicular box
+    int startRow = row - row % 3;
+    int startCol = col - col % 3;
+    for (int n = 0; n < 3; n++) {
+        for (int j = 0; j < 3; j++) {
+            if (board[startRow + n][startCol + j] == i) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+
+
+}
+
+bool solve(vector<vector<int> > &board , int size){
+
+
+    for(int row = 0; row < size ; row++){
+        for(int col = 0; col < size ; col++){
+
+            if(board[row][col] == 0){
+                
+                for(int i = 1; i<=9; i++){
+                    if(isSafe(row , col , board , size , i)){
+
+                        board[row][col] = i;
+                        bool isTrue = solve(board , size);
+
+                        if(isTrue){
+                            return true;
+                        }else{
+                            board[row][col] = 0;
+                        }
+                    }
+                }
+                return false;
+            }
+
+        }
+    }
+
+    return true;
+
+
+
+
+}
+
+
+
+
+
+int main(){
+
+    vector<vector<int>> sudoku = {
+    {5, 3, 0, 0, 7, 0, 0, 0, 0},
+    {6, 0, 0, 1, 9, 5, 0, 0, 0},
+    {0, 9, 8, 0, 0, 0, 0, 6, 0},
+    {8, 0, 0, 0, 6, 0, 0, 0, 3},
+    {4, 0, 0, 8, 0, 3, 0, 0, 1},
+    {7, 0, 0, 0, 2, 0, 0, 0, 6},
+    {0, 6, 0, 0, 0, 0, 2, 8, 0},
+    {0, 0, 0, 4, 1, 9, 0, 0, 5},
+    {0, 0, 0, 0, 8, 0, 0, 7, 9}
+    };
+
+    solve(sudoku , 9);
+
+    for(auto i : sudoku){
+        for(auto j:i){
+            cout << j << " ";
+        }cout << endl;
+    }
+
+
+    cout  << endl; 
+
+
+}
